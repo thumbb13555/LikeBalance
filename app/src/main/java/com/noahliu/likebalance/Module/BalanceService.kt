@@ -53,24 +53,28 @@ class BalanceService() : Service(),Runnable {
         handler.sendEmptyMessage(1)
         /**每1秒會再重複執行此task*/
         handler.postDelayed(this,  1)
+
     }
 
 
     override fun onStart(intent: Intent?, startId: Int) {
         super.onStart(intent, startId)
         Log.d(TAG, "onStart(Service): ")
-        val thisWidget = ComponentName(this, BalanceProvider::class.java)
-        val manager = AppWidgetManager.getInstance(this)
-        val remoteViews = RemoteViews(packageName, R.layout.balance_provider)
+
         if (intent!!.action != null) {
             if (intent.action.equals(ClickEvent)) {
                 Log.d(TAG, "onStart: (Click)")
                 update()
             }
         }
+        setButtonClick()
+    }
+    private fun setButtonClick(){
         val myIntent = Intent()
         myIntent.action = ClickEvent
-
+        val thisWidget = ComponentName(this, BalanceProvider::class.java)
+        val manager = AppWidgetManager.getInstance(this)
+        val remoteViews = RemoteViews(packageName, R.layout.balance_provider)
         val pendingIntent = PendingIntent.getService(
             this, 0,
             myIntent, 0

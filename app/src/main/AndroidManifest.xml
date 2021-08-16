@@ -15,7 +15,7 @@
         <receiver android:name=".Controller.BalanceProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="android.appwidget.action.UPDATE" />
+
             </intent-filter>
 
             <meta-data
@@ -32,7 +32,7 @@
         </activity>
         <service android:name=".Module.BalanceService"
             android:enabled="true"
-            >
+            android:exported="false">
             <intent-filter android:priority="1000">
                 <action android:name="com.noahliu.BalanceService"/>
                 <action android:name="android.appwidget.action.UPDATE" />

@@ -4,10 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_background"
+    android:background="@drawable/bk"
     tools:context=".Controller.MainActivity">
 
     <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -19,7 +20,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.45" />
+        app:layout_constraintGuide_percent="0.5" />
+
 
     <ImageView
         android:id="@+id/imageView_Headshot"
@@ -29,18 +31,18 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
 
     <TextView
         android:id="@+id/textView_Hello"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Hello! Liker! "
+        android:text="Hello! Liker! 11111111"
         android:textAlignment="center"
-        android:textColor="@android:color/white"
         android:textSize="22sp"
         android:textStyle="bold"
+        android:textColor="@color/main_text_color"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toEndOf="@+id/imageView_Headshot"
         app:layout_constraintStart_toStartOf="@+id/imageView_Headshot"
@@ -76,7 +78,6 @@
         android:padding="10dp"
         android:textAlignment="center"
         android:textColor="@android:color/white"
-        android:textColorHint="@color/main_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
@@ -85,18 +86,18 @@
         android:id="@+id/button_Bind"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="28dp"
+        android:layout_marginBottom="16dp"
         android:onClick="onBindClick"
         android:padding="10dp"
         android:text="@string/main_word_bind"
         android:textAppearance="@style/TextAppearance.AppCompat.Display3"
-        android:textColor="@color/main_background"
+        android:textColor="@color/white"
         android:textSize="18sp"
         android:textStyle="bold"
         android:theme="@style/MyButtonStyle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/editTextText_Account"
-        app:layout_constraintHorizontal_bias="0.525"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/editTextText_Account"
         app:rippleColor="@android:color/background_light" />
 
@@ -106,7 +107,7 @@
         android:layout_height="wrap_content"
         android:text="@string/main_word_invited_wallet_address"
         android:textAlignment="center"
-        android:textColor="@color/white"
+        android:textColor="@color/main_text_color"
         android:textSize="20dp"
         app:layout_constraintBottom_toTopOf="@+id/button_Bind"
         app:layout_constraintEnd_toEndOf="@+id/button_Bind"

@@ -11,4 +11,5 @@
     <string name="main_word_not_found">Not found the account.</string>
     <string name="main_word_invite_account">Invited account</string>
     <string name="main_word_last_update">Last update:</string>
+    <string name="login_account_or_psw_is_empty">The account/password is empty!</string>
 </resources>

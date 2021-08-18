@@ -1,4 +1,4 @@
-package com.noahliu.likebalance.Module
+package com.noahliu.likebalance.Module.Service
 
 import android.annotation.SuppressLint
 import android.app.PendingIntent
@@ -14,6 +14,7 @@ import android.widget.RemoteViews
 import com.google.gson.Gson
 import com.noahliu.likebalance.Controller.BalanceProvider
 import com.noahliu.likebalance.Module.Entity.Wallet
+import com.noahliu.likebalance.Module.GetAsyncTask
 import com.noahliu.likebalance.Module.SharedPreferences.MySharedPreferences
 import com.noahliu.likebalance.R
 import com.noahliu.likebalance.Untils.API
@@ -94,21 +95,23 @@ class BalanceService() : Service(),Runnable {
         val url = API.balanceRequest(account)
 
         task.execute(url)
-        task.onHttpRespond = object :GetAsyncTask.OnHttpRespond{
+        task.onHttpRespond = object : GetAsyncTask.OnHttpRespond {
             override fun onHttpRespond(result: ArrayList<String>, operationCode: Int) {
-                val gson = Gson().fromJson(result[0], Wallet::class.java)
-                val amount = (gson.result.value.coins[0].getChangeAmount())+" LIKE"
-                val time = sdf.format(Date())
-                Log.d(TAG, "Update: $amount, $time")
-                val remoteViews = RemoteViews(packageName, R.layout.balance_provider)
-                remoteViews.setTextViewText(R.id.textView_Balance,amount)
-                remoteViews.setTextViewText(R.id.textView_LastTime,time)
-                remoteViews.setTextViewText(R.id.textView_LikeID,"Liker: ${likerAccount.displayName}")
-                val manager = AppWidgetManager.getInstance(applicationContext)
-                val componentName = ComponentName(applicationContext,BalanceProvider::class.java)
-                manager.updateAppWidget(componentName,remoteViews)
-
-
+                try {
+                    val gson = Gson().fromJson(result[0], Wallet::class.java)
+                    val amount = (gson.result.value.coins[0].getChangeAmount())+" LIKE"
+                    val time = sdf.format(Date())
+                    Log.d(TAG, "Update: $amount, $time")
+                    val remoteViews = RemoteViews(packageName, R.layout.balance_provider)
+                    remoteViews.setTextViewText(R.id.textView_Balance,amount)
+                    remoteViews.setTextViewText(R.id.textView_LastTime,time)
+                    remoteViews.setTextViewText(R.id.textView_LikeID,"Liker: ${likerAccount.displayName}")
+                    val manager = AppWidgetManager.getInstance(applicationContext)
+                    val componentName = ComponentName(applicationContext,BalanceProvider::class.java)
+                    manager.updateAppWidget(componentName,remoteViews)
+                }catch (e:Exception){
+                    Log.d(TAG, "onHttpRespond: 無網路或出錯狀態")
+                }
             }
             override fun onProgressRespond(value: Int) {}
         }

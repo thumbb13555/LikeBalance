@@ -12,10 +12,11 @@
     <color name="light_blue_600">#FF039BE5</color>
     <color name="light_blue_900">#FF01579B</color>
 
-    <color name="main_background">#28646E</color>
+    <color name="main_background">#FFE7B7</color>
     <color name="main_background2">#F2F2F2</color>
-    <color name="second_background">#2F7D7D</color>
-    <color name="main_icon">#4DD2B8</color>
+    <color name="second_background">#FFD57B</color>
+    <color name="main_icon">#FFC381</color>
+    <color name="main_text_color">#756A54</color>
     <color name="info_background1">#D5EFEC</color>
     <color name="info_background2">#EEE7B9</color>
 

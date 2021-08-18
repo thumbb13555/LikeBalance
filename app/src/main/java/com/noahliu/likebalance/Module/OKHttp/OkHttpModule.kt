@@ -1,6 +1,8 @@
 package com.noahliu.likebalance.Module
 
 import android.os.SystemClock
+import com.apollographql.apollo.ApolloClient
+import com.apollographql.apollo.api.Query
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import java.io.IOException
@@ -69,5 +71,6 @@ object OkHttpModule {
             arrayList
         }
     }//End
+
 
 }

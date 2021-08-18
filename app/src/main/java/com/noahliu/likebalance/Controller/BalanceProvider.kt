@@ -1,18 +1,12 @@
 package com.noahliu.likebalance.Controller
 
 import android.app.ActivityManager
-import android.app.PendingIntent
-import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
-import android.widget.RemoteViews
-import androidx.core.content.ContextCompat.getSystemService
-import com.noahliu.likebalance.Module.BalanceService
-import com.noahliu.likebalance.R
+import com.noahliu.likebalance.Module.Service.BalanceService
 
 
 /**
@@ -66,10 +60,10 @@ class BalanceProvider : AppWidgetProvider() {
 
     private fun isMyServiceRunning(context: Context): Boolean {
         val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager?
-        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
-            return manager!!.getRunningServices(Int.MAX_VALUE).size > 0
+        return if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
+            manager!!.getRunningServices(Int.MAX_VALUE).size > 0
         }else{
-            return false
+            false
         }
 
 

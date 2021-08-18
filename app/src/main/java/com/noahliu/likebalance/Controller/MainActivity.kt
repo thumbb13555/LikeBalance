@@ -11,7 +11,6 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.noahliu.likebalance.Module.Activity.BaseActivity
-import com.noahliu.likebalance.Module.BalanceService
 import com.noahliu.likebalance.Module.Entity.LikerAccount
 import com.noahliu.likebalance.Module.GetAsyncTask
 import com.noahliu.likebalance.Module.SharedPreferences.MySharedPreferences
@@ -27,16 +26,19 @@ class MainActivity : BaseActivity() ,GetAsyncTask.OnHttpRespond{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Log.d(TAG, "onCreate(Activity)")
-        igHeadshot = findViewById(R.id.imageView_Headshot)
-        val intent = Intent()
-        intent.action = "android.appwidget.action.APPWIDGET_UPDATE"
-        sendBroadcast(intent)
-        Glide.with(this).load(getDrawable(R.drawable.blank_head)).circleCrop().into(igHeadshot)
-
         val likerAccount = MySharedPreferences.read(this)
+
         if (likerAccount != null){
+            igHeadshot = findViewById(R.id.imageView_Headshot)
+            val intent = Intent()
+            intent.action = "android.appwidget.action.APPWIDGET_UPDATE"
+            sendBroadcast(intent)
+            Glide.with(this).load(getDrawable(R.drawable.blank_head)).circleCrop().into(igHeadshot)
+            Log.d(TAG, "onCreate(Activity)")
             updateUI(likerAccount)
+        }else{
+            val intent = Intent(this,LoginActivity::class.java)
+            startActivity(intent)
         }
 
 
@@ -44,13 +46,8 @@ class MainActivity : BaseActivity() ,GetAsyncTask.OnHttpRespond{
 
     //Bind button clicked.
     fun onBindClick(view: View){
-        val edInput = findViewById<EditText>(R.id.editTextText_Account)
-        val account = edInput.text.toString()
-        if (account.isBlank()) {
-            showToast(getString(R.string.main_word_invite_account))
-            return
-        }
-        sendGET(accountRequest(account),0,true,this)
+
+
     }
 
     @SuppressLint("SetTextI18n")

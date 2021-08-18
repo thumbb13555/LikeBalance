@@ -1,0 +1,8 @@
+query GetLikerID{
+    viewer{
+        liker{
+            civicLiker
+        }
+        likerId
+    }
+}

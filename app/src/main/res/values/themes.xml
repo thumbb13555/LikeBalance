@@ -3,7 +3,7 @@
     <style name="Theme.LikeBalance" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">#929292</item>
-        <item name="colorPrimaryVariant">#929292</item>
+        <item name="colorPrimaryVariant">@color/main_icon</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>

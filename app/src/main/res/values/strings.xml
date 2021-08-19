@@ -3,7 +3,7 @@
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="main_word_hello">Hello!</string>
-    <string name="main_word_please_input_your_liker_account">Please input your liker account</string>
+    <string name="main_word_please_input_your_liker_account">Liker account</string>
     <string name="main_word_account_input_hint">Invited account</string>
     <string name="main_word_bind">Bind</string>
     <string name="main_word_invited_wallet_address">Invited wallet address</string>
@@ -12,4 +12,5 @@
     <string name="main_word_invite_account">Invited account</string>
     <string name="main_word_last_update">Last update:</string>
     <string name="login_account_or_psw_is_empty">The account/password is empty!</string>
+    <string name="sign_out">Sign out</string>
 </resources>

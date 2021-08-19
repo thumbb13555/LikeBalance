@@ -15,7 +15,7 @@ abstract class API : AppCompatActivity() {
         }
 
         fun balanceRequest(address: String):String{
-            return "https://mainnet-node.like.co/auth/accounts/$address"
+            return "https://mainnet-node.like.co/cosmos/bank/v1beta1/balances/$address/nanolike"
         }
 
         fun getCheckHttp(input:String):String{

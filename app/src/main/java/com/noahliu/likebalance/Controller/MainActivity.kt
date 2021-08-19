@@ -39,14 +39,19 @@ class MainActivity : BaseActivity() ,GetAsyncTask.OnHttpRespond{
         }else{
             val intent = Intent(this,LoginActivity::class.java)
             startActivity(intent)
+            finish()
         }
-
-
     }
 
     //Bind button clicked.
-    fun onBindClick(view: View){
-
+    fun logout(view: View){
+        if (MySharedPreferences.clear(this)){
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }else{
+            showToast("unknown error")
+        }
 
     }
 
@@ -62,6 +67,7 @@ class MainActivity : BaseActivity() ,GetAsyncTask.OnHttpRespond{
         MySharedPreferences.write(this,gson)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun updateUI(gson: LikerAccount) {
         Glide.with(this).load(gson.avatar)
             .circleCrop()

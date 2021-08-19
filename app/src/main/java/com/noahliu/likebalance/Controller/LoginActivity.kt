@@ -1,6 +1,7 @@
 package com.noahliu.likebalance.Controller
 
 import android.annotation.SuppressLint
+import android.app.ProgressDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -27,37 +28,48 @@ class LoginActivity :  BaseActivity() ,GetAsyncTask.OnHttpRespond{
     companion object{
         val TAG = LoginActivity::class.java.simpleName+"My"
     }
-
-    val devToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU3Mjc0IiwiaWF0IjoxNjI5MTkxMjQ2LCJleHAiOjE2MzY5NjcyNDZ9.IjG1BXvzs8K-oMWAkyv9JhFBIu-vcp6qpL41jCpdzv0"
+    lateinit var waitDialog: ProgressDialog
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        waitDialog = ProgressDialog(this)
     }
     fun signButtonClick(view: View){
-        val edAccount = findViewById<EditText>(R.id.editText_Account)
-        val edPassword =findViewById<PasswordEditText>(R.id.editText_Password)
-        val account = edAccount.text.toString().trim()
-        val password = edPassword.text.toString().trim()
-        if (account.isBlank() || password.isBlank()){
-            showToast(getString(R.string.login_account_or_psw_is_empty))
-            return
-        }
-        val token = Apollo.sendLogin(account,password)
-        if (token == ERROR_CODE){
-            showToast(getString(R.string.main_word_not_found))
-            return
-        }
-        val likerID = Apollo.getViewer(devToken)
-        Log.d(TAG, "onCreate: $likerID")
-        sendGET(accountRequest(likerID),0,true,this)
-    }
+        waitDialog.show()
+        Thread{
+            val edAccount = findViewById<EditText>(R.id.editText_Account)
+            val edPassword =findViewById<PasswordEditText>(R.id.editText_Password)
+            val account = edAccount.text.toString().trim()
+            val password = edPassword.text.toString().trim()
+            if (account.isBlank() || password.isBlank()){
+                runOnUiThread {
+                    showToast(getString(R.string.login_account_or_psw_is_empty))
+                }
+                return@Thread
+            }
+            val token = Apollo.sendLogin(account,password)
+            if (token == ERROR_CODE){
+                runOnUiThread {
+                    showToast(getString(R.string.main_word_not_found))
+                    waitDialog.dismiss()
+                }
+                return@Thread
+            }
+            val likerID = Apollo.getViewer(token)
+            Log.d(TAG, "onCreate: $likerID")
+            runOnUiThread {
+                sendGET(accountRequest(likerID),0,false,this)
+            }
+        }.start()
 
+    }
 
     @SuppressLint("SetTextI18n")
     override fun onHttpRespond(result: ArrayList<String>, operationCode: Int) {
         val res = result[0]
         if (res == "Not Found"){
             showToast(getString(R.string.main_word_not_found))
+            waitDialog.dismiss()
             return
         }
         try {
@@ -70,9 +82,7 @@ class LoginActivity :  BaseActivity() ,GetAsyncTask.OnHttpRespond{
         }catch (e:Exception){
             showToast("Unknown error")
         }
+        waitDialog.dismiss()
     }
-
     override fun onProgressRespond(value: Int) {}
-
-
 }

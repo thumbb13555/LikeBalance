@@ -26,6 +26,9 @@ object MySharedPreferences {
         if (json.isNullOrBlank()) return null
         return Gson().fromJson(json, LikerAccount::class.java)
     }
-
-
+    fun clear(context: Context):Boolean{
+        val share = context.getSharedPreferences(SHARED_PREFERENCE,Context.MODE_PRIVATE)
+        val editor = share.edit().clear()
+        return editor.commit()
+    }
 }

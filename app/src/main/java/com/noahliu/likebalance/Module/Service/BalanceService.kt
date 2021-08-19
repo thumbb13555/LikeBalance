@@ -98,8 +98,9 @@ class BalanceService() : Service(),Runnable {
         task.onHttpRespond = object : GetAsyncTask.OnHttpRespond {
             override fun onHttpRespond(result: ArrayList<String>, operationCode: Int) {
                 try {
+
                     val gson = Gson().fromJson(result[0], Wallet::class.java)
-                    val amount = (gson.result.value.coins[0].getChangeAmount())+" LIKE"
+                    val amount = (gson.balance.getChangeAmount())+" LIKE"
                     val time = sdf.format(Date())
                     Log.d(TAG, "Update: $amount, $time")
                     val remoteViews = RemoteViews(packageName, R.layout.balance_provider)

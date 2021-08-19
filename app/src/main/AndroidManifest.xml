@@ -12,13 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/Theme.LikeBalance">
-        <activity android:name=".Controller.LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".Controller.LoginActivity"/>
 
         <receiver android:name=".Controller.BalanceProvider">
             <intent-filter>
@@ -31,9 +25,12 @@
         </receiver>
 
         <activity android:name=".Controller.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-
         <service
             android:name=".Module.Service.BalanceService"
             android:enabled="true"

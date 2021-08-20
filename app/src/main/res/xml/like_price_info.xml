@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:initialKeyguardLayout="@layout/like_price"
+    android:initialLayout="@layout/like_price"
+    android:minWidth="165dp"
+    android:minHeight="55dp"
+    android:previewImage="@drawable/icon_cat"
+    android:resizeMode="horizontal|vertical"
+    android:updatePeriodMillis="86400000"
+    android:widgetCategory="home_screen"></appwidget-provider>

@@ -22,7 +22,6 @@ object MySharedPreferences {
     fun read(context: Context): LikerAccount? {
         val sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCE, Context.MODE_PRIVATE)
         val json = sharedPreferences.getString(ACCOUNT_INFO, "")
-        Log.d(TAG, "read: $json")
         if (json.isNullOrBlank()) return null
         return Gson().fromJson(json, LikerAccount::class.java)
     }

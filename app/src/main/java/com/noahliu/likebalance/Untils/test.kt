@@ -1,15 +1,30 @@
 package com.noahliu.likebalance.Untils
-
-import java.math.BigDecimal
-import java.math.RoundingMode
-import kotlin.math.pow
+import com.noahliu.likebalance.Module.OkHttpModule
+import kotlinx.coroutines.*
 
 fun main() {
-    val number = 64007870082457
+
+
+    val array = ArrayList<String>()
+    array.add(API.GET_Like2TWD_PRICE)
+    array.add(API.GET_Like2USDT_PRICE)
+
+    val info = runBlocking {
+        return@runBlocking getDetailInfo(array)
+    }
+    info.forEach {
+        print(it)
+    }
 
 
 
-
-
-
+}
+private suspend fun getDetailInfo(arrayList: ArrayList<String>): List<String> {
+    return coroutineScope {
+        return@coroutineScope (0 until arrayList.size).map {
+            async(Dispatchers.IO) {
+                return@async OkHttpModule.sendGET(arrayList[it])[0]
+            }
+        }.awaitAll()
+    }
 }

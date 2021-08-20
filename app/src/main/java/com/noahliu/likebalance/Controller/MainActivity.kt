@@ -13,8 +13,11 @@ import com.google.gson.Gson
 import com.noahliu.likebalance.Module.Activity.BaseActivity
 import com.noahliu.likebalance.Module.Entity.LikerAccount
 import com.noahliu.likebalance.Module.GetAsyncTask
+import com.noahliu.likebalance.Module.OkHttpModule
 import com.noahliu.likebalance.Module.SharedPreferences.MySharedPreferences
 import com.noahliu.likebalance.R
+import com.noahliu.likebalance.Untils.API
+import kotlinx.coroutines.*
 
 
 class MainActivity : BaseActivity() ,GetAsyncTask.OnHttpRespond{
@@ -41,7 +44,9 @@ class MainActivity : BaseActivity() ,GetAsyncTask.OnHttpRespond{
             startActivity(intent)
             finish()
         }
+
     }
+
 
     //Bind button clicked.
     fun logout(view: View){

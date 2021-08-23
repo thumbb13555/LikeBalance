@@ -11,6 +11,7 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.noahliu.likebalance.Module.Activity.BaseActivity
+import com.noahliu.likebalance.Module.Entity.LikeQuote
 import com.noahliu.likebalance.Module.Entity.LikerAccount
 import com.noahliu.likebalance.Module.GetAsyncTask
 import com.noahliu.likebalance.Module.OkHttpModule
@@ -44,8 +45,8 @@ class MainActivity : BaseActivity() ,GetAsyncTask.OnHttpRespond{
             startActivity(intent)
             finish()
         }
-
     }
+
 
 
     //Bind button clicked.

@@ -16,8 +16,6 @@ fun main() {
         print(it)
     }
 
-
-
 }
 private suspend fun getDetailInfo(arrayList: ArrayList<String>): List<String> {
     return coroutineScope {

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LikeBalance</string>
+    <string name="app_name">Balance</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="main_word_hello">Hello!</string>
@@ -13,4 +13,6 @@
     <string name="main_word_last_update">Last update:</string>
     <string name="login_account_or_psw_is_empty">The account/password is empty!</string>
     <string name="sign_out">Sign out</string>
+    <string name="widget_update">Update..</string>
+    <string name="now_price">Now Price</string>
 </resources>

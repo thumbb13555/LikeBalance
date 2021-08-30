@@ -13,6 +13,7 @@ import android.util.Log
 import android.widget.RemoteViews
 import com.google.gson.Gson
 import com.noahliu.likebalance.Controller.BalanceProvider
+import com.noahliu.likebalance.Controller.LikePriceProvider
 import com.noahliu.likebalance.Module.Entity.Wallet
 import com.noahliu.likebalance.Module.GetAsyncTask
 import com.noahliu.likebalance.Module.SharedPreferences.MySharedPreferences
@@ -25,8 +26,8 @@ import java.util.*
 class BalanceService : Service(),Runnable {
     companion object{
         val TAG = BalanceService::class.java.simpleName+"My"
-//        const val delay = 600000L
-        const val delay = 5000L
+        const val delay = 600000L//10分鐘
+//        const val delay = 5000L
         const val ClickEvent = "android.appwidget.action.UPDATE"
     }
     @SuppressLint("SimpleDateFormat")
@@ -53,7 +54,7 @@ class BalanceService : Service(),Runnable {
         Log.d(TAG, "onCreate(Service): ")
         handler.sendEmptyMessage(1)
         /**每1秒會再重複執行此task*/
-        handler.postDelayed(this,  1)
+        handler.postDelayed(this,1000)
 
     }
 
@@ -65,6 +66,11 @@ class BalanceService : Service(),Runnable {
         if (intent!!.action != null) {
             if (intent.action.equals(ClickEvent)) {
                 Log.d(TAG, "onStart: (Click)")
+                val remoteViews = RemoteViews(packageName, R.layout.balance_provider)
+                remoteViews.setTextViewText(R.id.textView_LastTime,getString(R.string.widget_update))
+                val manager = AppWidgetManager.getInstance(applicationContext)
+                val componentName = ComponentName(applicationContext,BalanceProvider::class.java)
+                manager.updateAppWidget(componentName,remoteViews)
                 update()
             }
         }

@@ -4,7 +4,7 @@
     android:initialLayout="@layout/like_price"
     android:minWidth="250dp"
     android:minHeight="80dp"
-    android:previewImage="@drawable/icon_cat"
+    android:previewImage="@drawable/price_example"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="86400000"
     android:widgetCategory="home_screen"></appwidget-provider>

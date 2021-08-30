@@ -57,7 +57,8 @@ class PriceService : Service(), Runnable {
         Log.d(TAG, "onCreate(Service): ")
         handler.sendEmptyMessage(1)
         /**每1秒會再重複執行此task*/
-        handler.post(this)
+        handler.postDelayed(this,1000)
+
 
     }
 
@@ -69,6 +70,11 @@ class PriceService : Service(), Runnable {
         if (intent!!.action != null) {
             if (intent.action.equals(ClickEvent)) {
                 Log.d(TAG, "onStart: (Click)")
+                val remoteViews = RemoteViews(packageName, R.layout.like_price)
+                remoteViews.setTextViewText(R.id.textView_LastTime, getString(R.string.widget_update))
+                val manager = AppWidgetManager.getInstance(applicationContext)
+                val componentName = ComponentName(applicationContext, LikePriceProvider::class.java)
+                manager.updateAppWidget(componentName, remoteViews)
                 update()
             }
         }
@@ -86,29 +92,37 @@ class PriceService : Service(), Runnable {
             myIntent, 0
         )
         remoteViews.setOnClickPendingIntent(R.id.imageButton_Price_Refresh, pendingIntent)
+
         manager.updateAppWidget(thisWidget, remoteViews)
     }
 
     fun update() {
         val array = ArrayList<String>()
-        array.add(API.GET_Like2TWD_PRICE)
-        array.add(API.GET_Like2USDT_PRICE)
+        array.add(API.GET_LikePRICE)
         val info = runBlocking {
             return@runBlocking getDetailInfo(array)
         }
-        val remoteViews = RemoteViews(packageName, R.layout.like_price)
-        var buffeer = StringBuffer()
-        for (i in info.indices) {
-            val gson = Gson().fromJson(info[i], LikeQuote::class.java)
-            if (i == 0){
-                val twd = String.format("%.3f",gson.data.likeCoin.quote.TWD.price)
-                buffeer.append("1Like = $$twd(TWD)\n")
-            }else{
-                val usdt = String.format("%.3f",gson.data.likeCoin.quote.USDT.price)
-                buffeer.append("1Like = ₮$usdt(USDT)")
-            }
+        if (info.isEmpty()){
+            Log.w(TAG, "update: 讀取價格的API出現錯誤" )
+            return
         }
-        remoteViews.setTextViewText(R.id.textView_Balance,buffeer.toString())
+        val remoteViews = RemoteViews(packageName, R.layout.like_price)
+        val buffer = StringBuffer()
+        val gson = Gson().fromJson(info[0], LikeQuote::class.java)
+        buffer.append("1Like = $${gson.data.TWD}(TWD)\n")
+        buffer.append("1Like = ₮${gson.data.USD}(USDT)")
+
+//        for (i in info.indices) {
+//            val gson = Gson().fromJson(info[i], LikeQuote::class.java)
+//            if (i == 0){
+//                val twd = String.format("%.3f",gson.data.likeCoin.quote.TWD.price)
+//                buffeer.append("1Like = $$twd(TWD)\n")
+//            }else{
+//                val usdt = String.format("%.3f",gson.data.likeCoin.quote.USDT.price)
+//                buffeer.append("1Like = ₮$usdt(USDT)")
+//            }
+//        }
+        remoteViews.setTextViewText(R.id.textView_Balance,buffer.toString())
 
         val time = sdf.format(Date())
         remoteViews.setTextViewText(R.id.textView_LastTime, time)

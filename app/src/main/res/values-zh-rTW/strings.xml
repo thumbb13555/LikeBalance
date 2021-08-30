@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Balance</string>
+    <string name="appwidget_text">範例</string>
+    <string name="add_widget">小工具</string>
+    <string name="main_word_hello">Hello!</string>
+    <string name="main_word_please_input_your_liker_account">Liker 帳號</string>
+    <string name="main_word_account_input_hint">請填入帳號</string>
+    <string name="main_word_bind">綁定</string>
+    <string name="main_word_invited_wallet_address">請填入錢包地址</string>
+    <string name="main_word_bind_success">綁定成功!</string>
+    <string name="main_word_not_found">登入失敗/無此帳號</string>
+    <string name="main_word_invite_account">請填入帳號</string>
+    <string name="main_word_last_update">"最後更新: "</string>
+    <string name="login_account_or_psw_is_empty">帳號/密碼欄位請勿空白!</string>
+    <string name="sign_out">登出</string>
+    <string name="widget_update">更新中..</string>
+    <string name="now_price">現在價格</string>
+</resources>

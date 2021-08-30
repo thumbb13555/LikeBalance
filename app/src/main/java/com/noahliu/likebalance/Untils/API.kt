@@ -11,6 +11,7 @@ abstract class API : AppCompatActivity() {
         const val ERROR_CODE = "Error_wfowefiwoejfwejfoweifnwnwe15a1v3"
         const val GET_Like2USDT_PRICE = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?id=2909&convert=USDT"
         const val GET_Like2TWD_PRICE = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?id=2909&convert=TWD"
+        const val GET_LikePRICE = "https://www.codernoah.tw/Balance/Search?coin=2909"
         private val WALLET_PATTERN: Pattern = Pattern.compile("[cosmos]{6}[0-9a-z]{39}")
         const val KEY = "53bc319d-7249-49da-b89f-672730481632"
 

@@ -3,8 +3,17 @@ package com.noahliu.likebalance.Module.Entity
 import com.google.gson.annotations.SerializedName
 import java.util.*
 
-data class LikeQuote(var data:Data) {
-    class Data (@SerializedName("2909") var likeCoin:LikeCoin)
+data class LikeQuote(var base:String, var time:String, var data:Data) {
+    class Data (@SerializedName("2909") var likeCoin:LikeCoin,
+                var USD:Double,
+                var TWD:Double,
+                var JPY:Double,
+                var HKD:Double,
+                var CNY:Double,
+                var MYR:Double,
+                var SGD:Double,
+                var IND:Double,
+    )
     class LikeCoin (
         var id:Int = 0,
         var name: String,

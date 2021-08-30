@@ -21,13 +21,19 @@ class LikePriceProvider : AppWidgetProvider() {
     override fun onEnabled(context: Context) {
         super.onEnabled(context)
         Log.d(TAG, "onEnabled(Price): ")
-        startMyService(isServiceRun(context), context)
+        val intent = Intent(context, PriceService::class.java)
+        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
+            context.startForegroundService(intent)
+        }
+        context.startService(intent)
+
     }
 
     override fun onDisabled(context: Context?) {
         super.onDisabled(context)
         Log.d(TAG, "onDisabled(Price): ")
         context!!.stopService(Intent(context, PriceService::class.java))
+
     }
 
 
@@ -35,6 +41,7 @@ class LikePriceProvider : AppWidgetProvider() {
         super.onReceive(context, intent)
         Log.d(TAG, "onReceive: ${intent!!.action}")
         val hasService = isServiceRun(context!!)
+
         Log.d(TAG, "onReceive是否有Price Service?: $hasService")
         if (intent.action.equals("android.appwidget.action.APPWIDGET_UPDATE")) {
             startMyService(hasService, context)

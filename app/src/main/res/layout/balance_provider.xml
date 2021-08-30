@@ -43,6 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
+        android:paddingStart="5dp"
         android:gravity="center|center_vertical"
         android:text="------ LIKE"
         android:textColor="@color/main_text_color"

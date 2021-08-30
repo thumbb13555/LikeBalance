@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Build
 import android.util.Log
 import com.noahliu.likebalance.Module.Service.BalanceService
+import com.noahliu.likebalance.Module.Service.PriceService
 
 
 /**
@@ -15,23 +16,28 @@ import com.noahliu.likebalance.Module.Service.BalanceService
 class BalanceProvider : AppWidgetProvider() {
     val TAG = BalanceService.TAG
 
-
     override fun onEnabled(context: Context) {
         super.onEnabled(context)
         Log.d(TAG, "onEnabled: ")
-        startMyService(isServiceRun(context), context)
+        val intent = Intent(context, BalanceService::class.java)
+        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
+            context.startForegroundService(intent)
+        }
+        context.startService(intent)
     }
 
     override fun onDisabled(context: Context?) {
         super.onDisabled(context)
         Log.d(TAG, "onDisabled: ")
         context!!.stopService(Intent(context, BalanceService::class.java))
+
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent)
         Log.d(TAG, "onReceive: ${intent!!.action}")
         val hasService = isServiceRun(context!!)
+
         Log.d(TAG, "onReceive是否有Service?: $hasService")
         if (intent.action.equals("android.appwidget.action.APPWIDGET_UPDATE")) {
             startMyService(hasService, context)

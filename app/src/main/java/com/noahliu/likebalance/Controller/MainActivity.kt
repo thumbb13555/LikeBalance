@@ -47,8 +47,6 @@ class MainActivity : BaseActivity() ,GetAsyncTask.OnHttpRespond{
         }
     }
 
-
-
     //Bind button clicked.
     fun logout(view: View){
         if (MySharedPreferences.clear(this)){

@@ -99,33 +99,29 @@ class PriceService : Service(), Runnable {
     fun update() {
         val array = ArrayList<String>()
         array.add(API.GET_LikePRICE)
-        val info = runBlocking {
-            return@runBlocking getDetailInfo(array)
-        }
-        if (info.isEmpty()){
-            Log.w(TAG, "update: 讀取價格的API出現錯誤" )
-            return
-        }
-        val remoteViews = RemoteViews(packageName, R.layout.like_price)
-        val buffer = StringBuffer()
-        val gson = Gson().fromJson(info[0], LikeQuote::class.java)
-        buffer.append("1Like = $${gson.data.TWD}(TWD)\n")
-        buffer.append("1Like = ₮${gson.data.USD}(USDT)")
-
-//        for (i in info.indices) {
-//            val gson = Gson().fromJson(info[i], LikeQuote::class.java)
-//            if (i == 0){
-//                val twd = String.format("%.3f",gson.data.likeCoin.quote.TWD.price)
-//                buffeer.append("1Like = $$twd(TWD)\n")
-//            }else{
-//                val usdt = String.format("%.3f",gson.data.likeCoin.quote.USDT.price)
-//                buffeer.append("1Like = ₮$usdt(USDT)")
-//            }
-//        }
-        remoteViews.setTextViewText(R.id.textView_Balance,buffer.toString())
-
         val time = sdf.format(Date())
-        remoteViews.setTextViewText(R.id.textView_LastTime, time)
+        val remoteViews = RemoteViews(packageName, R.layout.like_price)
+        try{
+            val info = runBlocking {
+                return@runBlocking getDetailInfo(array)
+            }
+            if (info.isEmpty()){
+                Log.w(TAG, "update: 讀取價格的API出現錯誤" )
+                return
+            }
+
+            val buffer = StringBuffer()
+            val gson = Gson().fromJson(info[0], LikeQuote::class.java)
+            buffer.append("1Like = $${gson.data.TWD}(TWD)\n")
+            buffer.append("1Like = ₮${gson.data.USD}(USDT)")
+            remoteViews.setTextViewText(R.id.textView_Balance,buffer.toString())
+            remoteViews.setTextViewText(R.id.textView_LastTime, time)
+
+        }catch (e:Exception){
+            Log.w(TAG, "update: 無網路或是分析出錯" )
+            remoteViews.setTextViewText(R.id.textView_LastTime, time+getString(R.string.service_no_internet))
+        }
+
         val manager = AppWidgetManager.getInstance(applicationContext)
         val componentName = ComponentName(applicationContext, LikePriceProvider::class.java)
         manager.updateAppWidget(componentName, remoteViews)

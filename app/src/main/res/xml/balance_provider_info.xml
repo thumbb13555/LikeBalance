@@ -3,7 +3,7 @@
     android:initialKeyguardLayout="@layout/balance_provider"
     android:initialLayout="@layout/balance_provider"
     android:minWidth="250dp"
-    android:minHeight="80dp"
+    android:minHeight="160dp"
     android:previewImage="@drawable/balance_example"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="86400000"

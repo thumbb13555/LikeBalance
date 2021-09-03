@@ -15,4 +15,6 @@
     <string name="sign_out">Sign out</string>
     <string name="widget_update">Update..</string>
     <string name="now_price">Now Price</string>
+    <string name="service_no_internet">(No Internet)</string>
+    <string name="main_word_unbind">Unbind</string>
 </resources>

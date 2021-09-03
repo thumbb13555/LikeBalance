@@ -14,11 +14,17 @@ import android.widget.RemoteViews
 import com.google.gson.Gson
 import com.noahliu.likebalance.Controller.BalanceProvider
 import com.noahliu.likebalance.Controller.LikePriceProvider
+import com.noahliu.likebalance.Module.Entity.LikeQuote
 import com.noahliu.likebalance.Module.Entity.Wallet
 import com.noahliu.likebalance.Module.GetAsyncTask
+import com.noahliu.likebalance.Module.OkHttpModule
 import com.noahliu.likebalance.Module.SharedPreferences.MySharedPreferences
 import com.noahliu.likebalance.R
 import com.noahliu.likebalance.Untils.API
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -91,37 +97,40 @@ class BalanceService : Service(),Runnable {
     }
 
     fun update(){
+        val remoteViews = RemoteViews(packageName, R.layout.balance_provider)
+        val time = sdf.format(Date())
         val likerAccount = MySharedPreferences.read(this)
         if (likerAccount == null){
             Log.d(TAG, "update: 尚未綁定任何帳號")
             return
         }
-        val task = GetAsyncTask(this, 0, false)
-        val account = likerAccount.cosmosWallet
-        val url = API.balanceRequest(account)
-
-        task.execute(url)
-        task.onHttpRespond = object : GetAsyncTask.OnHttpRespond {
-            override fun onHttpRespond(result: ArrayList<String>, operationCode: Int) {
+        val url = API.balanceRequest(likerAccount.cosmosWallet)
+        val urlPrice = API.GET_LikePRICE
+        CoroutineScope(Dispatchers.IO).launch {
+            val result = OkHttpModule.sendGET(url)
+            val price = OkHttpModule.sendGET(urlPrice)
+            withContext(Dispatchers.Default){
                 try {
-
                     val gson = Gson().fromJson(result[0], Wallet::class.java)
-                    val amount = (gson.balance.getChangeAmount())+" LIKE"
-                    val time = sdf.format(Date())
+                    val priceGson = Gson().fromJson(price[0],LikeQuote::class.java)
+                    val twd = String.format("%.1f",gson.balance.getChangeAmount().toDouble()*priceGson.data.TWD)
+                    val amount = (gson.balance.getChangeAmount())+" LIKE\n"+"= $"+(twd)+"(TWD)"
                     Log.d(TAG, "Update: $amount, $time")
-                    val remoteViews = RemoteViews(packageName, R.layout.balance_provider)
                     remoteViews.setTextViewText(R.id.textView_Balance,amount)
-                    remoteViews.setTextViewText(R.id.textView_LastTime,time)
                     remoteViews.setTextViewText(R.id.textView_LikeID,"Liker: ${likerAccount.displayName}")
-                    val manager = AppWidgetManager.getInstance(applicationContext)
-                    val componentName = ComponentName(applicationContext,BalanceProvider::class.java)
-                    manager.updateAppWidget(componentName,remoteViews)
+                    remoteViews.setTextViewText(R.id.textView_LastTime,time)
+
                 }catch (e:Exception){
                     Log.d(TAG, "onHttpRespond: 無網路或出錯狀態")
+                    remoteViews.setTextViewText(R.id.textView_LastTime,time+getString(R.string.service_no_internet))
                 }
+
+                val manager = AppWidgetManager.getInstance(applicationContext)
+                val componentName = ComponentName(applicationContext,BalanceProvider::class.java)
+                manager.updateAppWidget(componentName,remoteViews)
             }
-            override fun onProgressRespond(value: Int) {}
         }
+
     }
 
 

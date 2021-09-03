@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Balance</string>
+    <string name="app_name">Likecoin\n餘額小工具</string>
     <string name="appwidget_text">範例</string>
     <string name="add_widget">小工具</string>
     <string name="main_word_hello">Hello!</string>

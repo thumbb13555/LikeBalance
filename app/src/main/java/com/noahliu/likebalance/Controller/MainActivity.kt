@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -26,37 +27,40 @@ class MainActivity : BaseActivity() ,GetAsyncTask.OnHttpRespond{
         val TAG = MainActivity::class.java.simpleName+"My"
     }
     lateinit var igHeadshot:ImageView
+    lateinit var btBind:Button
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val likerAccount = MySharedPreferences.read(this)
-
+        igHeadshot = findViewById(R.id.imageView_Headshot)
+        btBind = findViewById(R.id.button_Bind)
+        Glide.with(this).load(getDrawable(R.drawable.blank_head)).circleCrop().into(igHeadshot)
+        val intent = Intent()
+        intent.action = "android.appwidget.action.APPWIDGET_UPDATE"
+        sendBroadcast(intent)
         if (likerAccount != null){
-            igHeadshot = findViewById(R.id.imageView_Headshot)
-            val intent = Intent()
-            intent.action = "android.appwidget.action.APPWIDGET_UPDATE"
-            sendBroadcast(intent)
-            Glide.with(this).load(getDrawable(R.drawable.blank_head)).circleCrop().into(igHeadshot)
             Log.d(TAG, "onCreate(Activity)")
             updateUI(likerAccount)
         }else{
-            val intent = Intent(this,LoginActivity::class.java)
-            startActivity(intent)
-            finish()
+            updateUI()
         }
     }
 
     //Bind button clicked.
     fun logout(view: View){
-        if (MySharedPreferences.clear(this)){
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-            finish()
-        }else{
-            showToast("unknown error")
-        }
-
+       if (MySharedPreferences.read(this) != null){
+           MySharedPreferences.clear(this)
+           updateUI()
+       }else{
+           val edInput = findViewById<EditText>(R.id.editTextText_Account)
+           val account = edInput.text.toString().trim()
+           if (account.isEmpty()){
+               showToast(getString(R.string.main_word_account_input_hint))
+               return
+           }
+           sendGET(accountRequest(account),0,true,this)
+       }
     }
 
     @SuppressLint("SetTextI18n")
@@ -82,8 +86,26 @@ class MainActivity : BaseActivity() ,GetAsyncTask.OnHttpRespond{
         val edInput = findViewById<EditText>(R.id.editTextText_Account)
         edInput.setText(gson.user)
         tvTitle.text = getString(R.string.main_word_hello) + " ${gson.displayName}"
+        btBind.text = getString(R.string.main_word_unbind)
         tvWallet.text = getString(R.string.main_word_bind_success)
+        edInput.isEnabled = false
     }
+    @SuppressLint("SetTextI18n")
+    private fun updateUI() {
+        Glide.with(this).load(R.drawable.blank_head)
+            .circleCrop()
+            .placeholder(R.drawable.blank_head)
+            .error(R.drawable.blank_head).into(igHeadshot)
+        val tvTitle = findViewById<TextView>(R.id.textView_Hello)
+        val tvWallet = findViewById<TextView>(R.id.textView_WalletRespond)
+        val edInput = findViewById<EditText>(R.id.editTextText_Account)
+        edInput.setText("")
+        tvTitle.text = getString(R.string.main_word_hello)
+        btBind.text = getString(R.string.main_word_bind)
+        tvWallet.text = getString(R.string.main_word_invite_account)
+        edInput.isEnabled = true
+    }
+
 
     override fun onProgressRespond(value: Int) {}
 }

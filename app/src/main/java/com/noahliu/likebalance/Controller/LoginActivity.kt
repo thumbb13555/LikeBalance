@@ -32,7 +32,12 @@ class LoginActivity :  BaseActivity() ,GetAsyncTask.OnHttpRespond{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        val account = intent.getStringExtra(LOGIN_INFO)
+        val edAccount = findViewById<EditText>(R.id.editText_Account)
+        edAccount.setText(account)
+
         waitDialog = ProgressDialog(this)
+        waitDialog.setMessage(getString(R.string.dialog_wait))
     }
     fun signButtonClick(view: View){
         waitDialog.show()
@@ -44,6 +49,7 @@ class LoginActivity :  BaseActivity() ,GetAsyncTask.OnHttpRespond{
             if (account.isBlank() || password.isBlank()){
                 runOnUiThread {
                     showToast(getString(R.string.login_account_or_psw_is_empty))
+                    waitDialog.dismiss()
                 }
                 return@Thread
             }

@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.app.Service
 import android.appwidget.AppWidgetManager
+import android.content.BroadcastReceiver
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import android.os.IBinder
@@ -14,6 +16,7 @@ import android.widget.RemoteViews
 import com.google.gson.Gson
 import com.noahliu.likebalance.Controller.BalanceProvider
 import com.noahliu.likebalance.Controller.LikePriceProvider
+import com.noahliu.likebalance.Controller.MainActivity
 import com.noahliu.likebalance.Module.Entity.LikeQuote
 import com.noahliu.likebalance.Module.Entity.Wallet
 import com.noahliu.likebalance.Module.GetAsyncTask
@@ -27,15 +30,20 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
+import android.content.IntentFilter
 
 
-class BalanceService : Service(),Runnable {
+
+
+
+class BalanceService : Service(),Runnable{
     companion object{
         val TAG = BalanceService::class.java.simpleName+"My"
         const val delay = 600000L//10分鐘
 //        const val delay = 5000L
         const val ClickEvent = "android.appwidget.action.UPDATE"
     }
+    lateinit var broadcast:BroadCast
     @SuppressLint("SimpleDateFormat")
     val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 
@@ -61,7 +69,16 @@ class BalanceService : Service(),Runnable {
         handler.sendEmptyMessage(1)
         /**每1秒會再重複執行此task*/
         handler.postDelayed(this,1000)
-
+        broadcast = BroadCast(object : BroadCast.OnUpdate{
+            override fun callUpdate() {
+                Log.d(TAG, "callUpdate: ")
+                update()
+            }
+        })
+        val intentFilter = IntentFilter()
+        intentFilter.addAction(MainActivity.UPDATE_Balance)
+        /**註冊廣播*/
+        registerReceiver(broadcast, intentFilter)
     }
 
 
@@ -133,10 +150,25 @@ class BalanceService : Service(),Runnable {
 
     }
 
-
     override fun run() {
         handler.sendEmptyMessage(1)
-
         handler.postDelayed(this,  delay)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(broadcast)
+    }
+
+    class BroadCast(val onUpdate: OnUpdate) : BroadcastReceiver(){
+        
+        override fun onReceive(p0: Context?, intent: Intent) {
+            if (intent.action == MainActivity.UPDATE_Balance){
+                onUpdate.callUpdate()
+            }
+        }
+        interface OnUpdate{
+            fun callUpdate()
+        }
     }
 }

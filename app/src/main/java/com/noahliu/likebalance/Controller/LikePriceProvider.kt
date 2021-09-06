@@ -69,7 +69,7 @@ class LikePriceProvider : AppWidgetProvider() {
         val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         val list = manager.getRunningServices(Int.MAX_VALUE)
         for (info in list) {
-            if (PriceService::class.java.name == info.service.className) return true
+            if (PriceService::class.java.name == info.service.className)return true
         }
         return false
     }

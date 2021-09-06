@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.app.Service
 import android.appwidget.AppWidgetManager
+import android.content.BroadcastReceiver
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import android.os.IBinder
@@ -145,4 +147,6 @@ class PriceService : Service(), Runnable {
 
         handler.postDelayed(this, delay)
     }
+
+
 }

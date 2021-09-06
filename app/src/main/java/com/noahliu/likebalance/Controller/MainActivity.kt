@@ -22,12 +22,15 @@ import com.noahliu.likebalance.Untils.API
 import kotlinx.coroutines.*
 
 
-class MainActivity : BaseActivity() ,GetAsyncTask.OnHttpRespond{
-    companion object{
-        val TAG = MainActivity::class.java.simpleName+"My"
+class MainActivity : BaseActivity(), GetAsyncTask.OnHttpRespond {
+    companion object {
+        val TAG = MainActivity::class.java.simpleName + "My"
+        val UPDATE_Balance = "android.appwidget.action.UPDATE"
     }
-    lateinit var igHeadshot:ImageView
-    lateinit var btBind:Button
+
+    lateinit var igHeadshot: ImageView
+    lateinit var btBind: Button
+
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,40 +42,50 @@ class MainActivity : BaseActivity() ,GetAsyncTask.OnHttpRespond{
         val intent = Intent()
         intent.action = "android.appwidget.action.APPWIDGET_UPDATE"
         sendBroadcast(intent)
-        if (likerAccount != null){
+        if (likerAccount != null) {
             Log.d(TAG, "onCreate(Activity)")
             updateUI(likerAccount)
-        }else{
+        } else {
             updateUI()
         }
     }
 
     //Bind button clicked.
-    fun logout(view: View){
-       if (MySharedPreferences.read(this) != null){
-           MySharedPreferences.clear(this)
-           updateUI()
-       }else{
-           val edInput = findViewById<EditText>(R.id.editTextText_Account)
-           val account = edInput.text.toString().trim()
-           if (account.isEmpty()){
-               showToast(getString(R.string.main_word_account_input_hint))
-               return
-           }
-           sendGET(accountRequest(account),0,true,this)
-       }
+    fun loginFromMatters(view: View) {
+        val intent = Intent(this,LoginActivity::class.java)
+        val edInput = findViewById<EditText>(R.id.editTextText_Account)
+        val account = edInput.text.toString().trim()
+        intent.putExtra(LOGIN_INFO,account)
+        startActivity(intent)
+        finish()
+    }
+
+    //Bind button clicked.
+    fun logout(view: View) {
+        if (MySharedPreferences.read(this) != null) {
+            MySharedPreferences.clear(this)
+            updateUI()
+        } else {
+            val edInput = findViewById<EditText>(R.id.editTextText_Account)
+            val account = edInput.text.toString().trim()
+            if (account.isEmpty()) {
+                showToast(getString(R.string.main_word_account_input_hint))
+                return
+            }
+            sendGET(accountRequest(account), 0, true, this)
+        }
     }
 
     @SuppressLint("SetTextI18n")
     override fun onHttpRespond(result: ArrayList<String>, operationCode: Int) {
         val res = result[0]
-        if (res == "Not Found"){
+        if (res == "Not Found") {
             showToast(getString(R.string.main_word_not_found))
             return
         }
-        val gson = Gson().fromJson(res,LikerAccount::class.java)
+        val gson = Gson().fromJson(res, LikerAccount::class.java)
         updateUI(gson)
-        MySharedPreferences.write(this,gson)
+        MySharedPreferences.write(this, gson)
     }
 
     @SuppressLint("SetTextI18n")
@@ -84,12 +97,18 @@ class MainActivity : BaseActivity() ,GetAsyncTask.OnHttpRespond{
         val tvTitle = findViewById<TextView>(R.id.textView_Hello)
         val tvWallet = findViewById<TextView>(R.id.textView_WalletRespond)
         val edInput = findViewById<EditText>(R.id.editTextText_Account)
+        val btMattersLogin = findViewById<Button>(R.id.button_MattersLogin)
+        btMattersLogin.visibility = View.GONE
         edInput.setText(gson.user)
         tvTitle.text = getString(R.string.main_word_hello) + " ${gson.displayName}"
         btBind.text = getString(R.string.main_word_unbind)
         tvWallet.text = getString(R.string.main_word_bind_success)
         edInput.isEnabled = false
+        val intent = Intent()
+        intent.action = UPDATE_Balance
+        sendBroadcast(intent)
     }
+
     @SuppressLint("SetTextI18n")
     private fun updateUI() {
         Glide.with(this).load(R.drawable.blank_head)
@@ -99,6 +118,8 @@ class MainActivity : BaseActivity() ,GetAsyncTask.OnHttpRespond{
         val tvTitle = findViewById<TextView>(R.id.textView_Hello)
         val tvWallet = findViewById<TextView>(R.id.textView_WalletRespond)
         val edInput = findViewById<EditText>(R.id.editTextText_Account)
+        val btMattersLogin = findViewById<Button>(R.id.button_MattersLogin)
+        btMattersLogin.visibility = View.VISIBLE
         edInput.setText("")
         tvTitle.text = getString(R.string.main_word_hello)
         btBind.text = getString(R.string.main_word_bind)

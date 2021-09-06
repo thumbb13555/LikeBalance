@@ -12,6 +12,10 @@ import com.noahliu.likebalance.Untils.API
 import okhttp3.FormBody
 
 abstract class BaseActivity : API() {
+    companion object{
+        const val LOGIN_INFO = "ACCOUNT"
+    }
+
 
     fun sendGET(
         url: String,

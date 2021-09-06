@@ -19,5 +19,6 @@
     <color name="main_text_color">#756A54</color>
     <color name="info_background1">#D5EFEC</color>
     <color name="info_background2">#EEE7B9</color>
+    <color name="button_reverse_color">#3792B3</color>
 
 </resources>

@@ -17,4 +17,8 @@
     <string name="now_price">Now Price</string>
     <string name="service_no_internet">(No Internet)</string>
     <string name="main_word_unbind">Unbind</string>
+    <string name="main_word_sign_with_matters">Sign in with Matters</string>
+    <string name="dialog_wait">Please wait..</string>
+    <string name="login_invited_password">Invited password</string>
+    <string name="sign_in">Sign in</string>
 </resources>

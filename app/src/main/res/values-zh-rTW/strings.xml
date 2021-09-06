@@ -16,4 +16,10 @@
     <string name="sign_out">登出</string>
     <string name="widget_update">更新中..</string>
     <string name="now_price">現在價格</string>
+    <string name="service_no_internet">(無網路)</string>
+    <string name="main_word_unbind">解除綁定</string>
+    <string name="main_word_sign_with_matters">以Matters登入</string>
+    <string name="dialog_wait">請稍後..</string>
+    <string name="login_invited_password">請輸入密碼</string>
+    <string name="sign_in">登入</string>
 </resources>

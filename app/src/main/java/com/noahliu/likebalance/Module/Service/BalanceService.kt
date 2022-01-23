@@ -31,9 +31,7 @@ import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
 import android.content.IntentFilter
-
-
-
+import com.noahliu.likebalance.Untils.CurrencyTab
 
 
 class BalanceService : Service(),Runnable{
@@ -130,18 +128,17 @@ class BalanceService : Service(),Runnable{
                 try {
                     val gson = Gson().fromJson(result[0], Wallet::class.java)
                     val priceGson = Gson().fromJson(price[0],LikeQuote::class.java)
-                    val twd = String.format("%.1f",gson.balance.getChangeAmount().toDouble()*priceGson.data.TWD)
-                    val amount = (gson.balance.getChangeAmount())+" LIKE\n"+"= $"+(twd)+"(TWD)"
+                    val twd = String.format("%.1f",gson.balances[0].getChangeAmount().toDouble()
+                            *CurrencyTab.getCountryCurrency(priceGson.data))
+                    val amount = (gson.balances[0].getChangeAmount())+" LIKE\n"+"= $"+(twd)+"(${CurrencyTab.getCountryTAB()})"
                     Log.d(TAG, "Update: $amount, $time")
                     remoteViews.setTextViewText(R.id.textView_Balance,amount)
                     remoteViews.setTextViewText(R.id.textView_LikeID,"Liker: ${likerAccount.displayName}")
                     remoteViews.setTextViewText(R.id.textView_LastTime,time)
-
                 }catch (e:Exception){
-                    Log.d(TAG, "onHttpRespond: 無網路或出錯狀態")
+                    Log.d(TAG, "onHttpRespond: 無網路或出錯狀態"+e.message)
                     remoteViews.setTextViewText(R.id.textView_LastTime,time+getString(R.string.service_no_internet))
                 }
-
                 val manager = AppWidgetManager.getInstance(applicationContext)
                 val componentName = ComponentName(applicationContext,BalanceProvider::class.java)
                 manager.updateAppWidget(componentName,remoteViews)

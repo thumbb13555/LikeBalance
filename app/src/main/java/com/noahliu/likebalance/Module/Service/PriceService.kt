@@ -21,6 +21,7 @@ import com.noahliu.likebalance.Module.Entity.LikeQuote
 import com.noahliu.likebalance.Module.OkHttpModule
 import com.noahliu.likebalance.R
 import com.noahliu.likebalance.Untils.API
+import com.noahliu.likebalance.Untils.CurrencyTab
 import kotlinx.coroutines.*
 import java.lang.Runnable
 import java.text.SimpleDateFormat
@@ -114,7 +115,7 @@ class PriceService : Service(), Runnable {
 
             val buffer = StringBuffer()
             val gson = Gson().fromJson(info[0], LikeQuote::class.java)
-            buffer.append("1Like = $${gson.data.TWD}(TWD)\n")
+            buffer.append("1Like = $${CurrencyTab.getCountryCurrency(gson.data)}(${CurrencyTab.getCountryTAB()})\n")
             buffer.append("1Like = ₮${gson.data.USD}(USDT)")
             remoteViews.setTextViewText(R.id.textView_Balance,buffer.toString())
             remoteViews.setTextViewText(R.id.textView_LastTime, time)
